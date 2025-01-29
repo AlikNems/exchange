@@ -1,0 +1,36 @@
+.text-box {
+ display: flex;
+ align-items: flex-start;
+ justify-content: flex-start;
+ flex-direction: column;
+ background-color: #ffffff;
+ width: 60vw;
+ height: 70vh;
+ position: relative;
+ z-index: 2;
+ padding: 3vh 4vw;
+ overflow-y: auto;
+ border-radius: 10px;
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.text-box h1 {
+ margin-bottom: 2vh;
+ font-size: 1.8rem;
+ color: #333;
+}
+
+.text-box h3 {
+ margin-top: 2vh;
+ margin-bottom: 1vh;
+ font-size: 1.4rem;
+ color: #444;
+}
+
+.text-box p {
+ margin-bottom: 1.5vh;
+ line-height: 1.6;
+ font-size: 1rem;
+ text-align: justify;
+ color: #555;
+}
