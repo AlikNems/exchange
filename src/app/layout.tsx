@@ -1,19 +1,20 @@
 import "@/app/globals.css";
-import Header from '@/components/Header';
+import SignUp from "@/components/auth/SignUp";
+import Header from "@/components/Header";
 
 export default function RootLayout({
-  children,
+ children,
 }: {
-  children: React.ReactNode;
+ children: React.ReactNode;
 }) {
-  return (
-    <html lang="en">
-      <body className="body-block">
-        <Header/>
+ return (
+  <html lang="en">
+   <body className="body-block">
+    <Header />
 
-        {children}
-        <footer className="footer-block">FOOTER</footer>
-      </body>
-    </html>
-  );
+    {children}
+    <footer className="footer-block">FOOTER</footer>
+   </body>
+  </html>
+ );
 }
