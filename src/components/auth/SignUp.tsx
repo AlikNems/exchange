@@ -1,9 +1,8 @@
-'use client'
+"use client";
 import { auth } from "@/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
-// import './SignUp.css'
-import '@/components/auth/SignUp.css'
+import  '@/components/auth/auth-styles/styles.css'
 
 const SignUp = () => {
  const [email, setEmail] = useState("");
@@ -29,25 +28,29 @@ const SignUp = () => {
  };
 
  return (
-  <div className="signup-block">
+  <div className="signup-out-content-block">
    <form onSubmit={register}>
     <h2>Create an account</h2>
     <input
      type="email"
      value={email}
      onChange={(e) => setEmail(e.target.value)}
+     placeholder="Input your email"
     />
     <input
      type="password"
      value={password}
      onChange={(e) => setPassword(e.target.value)}
+     placeholder="Input your password"
     />
     <input
      type="password"
      value={copyPassword}
      onChange={(e) => setCopyPassword(e.target.value)}
+     placeholder="Input your password again"
     />
     <button>Create</button>
+    {error ? <p style={{ color: "red"}}>{error}</p> : ""}
    </form>
   </div>
  );

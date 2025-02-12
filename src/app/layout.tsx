@@ -1,5 +1,4 @@
 import "@/app/globals.css";
-import SignUp from "@/components/auth/SignUp";
 import Header from "@/components/Header";
 
 export default function RootLayout({
