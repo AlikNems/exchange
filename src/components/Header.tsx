@@ -80,7 +80,7 @@ const Header = () => {
      </Button>
     </Link>
    </div>
-   <div className="login-out-block">LOGIN/Out</div>
+
   </div>
  );
 };
