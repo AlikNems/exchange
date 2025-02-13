@@ -6,9 +6,9 @@ import Link from "next/link";
 const Header = () => {
  return (
   <div className="header-block">
-   <Link href="/" passHref>
+
     <div className="logo-block"></div>
-   </Link>
+   
 
    <div className="routing-buttons-block">
     <Link href="/pages/about" passHref>
@@ -80,7 +80,7 @@ const Header = () => {
      </Button>
     </Link>
    </div>
-   <div className="login-out-block">LOGIN/Out</div>
+
   </div>
  );
 };

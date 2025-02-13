@@ -3,6 +3,12 @@
  padding: 0;
 }
 
+p {
+ text-align: center;
+ color: white;
+ font-size: 30px;
+}
+
 .header-block {
  background-color: rgb(128, 123, 123);
  width: 100vw;
@@ -29,6 +35,7 @@
  align-items: center;
  justify-content: center;
  gap: 2vw;
+ padding-right: 25vw;
 }
 
 
@@ -40,6 +47,31 @@
  align-items: center;
  justify-content: center;
  overflow: hidden;
+}
+
+.welcome-text {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ flex-direction: column;
+position: relative;
+z-index: 1;
+ display: block;
+ width: 100%;
+ max-width: 500px;
+ height: 100%;
+ max-height: 200px;
+ background-color: rgba(26, 26, 26, 0.6);
+ border-radius: 10px;
+ border: 3px solid #888888; /* Серый бордер для формы */
+ box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8), 0 4px 8px rgba(0, 0, 0, 0.3);
+ padding: 30px 15px 20px 15px;
+ gap: 20px;
+}
+
+.welcome-text p,button {
+  margin-bottom: 20px;
+  font-size: 50px;
 }
 
 .content-block::before {
@@ -65,4 +97,48 @@
  display: flex;
 }
 
+button {
+ background-color: transparent;
+ color: #888888;
+ border: 2px solid #888888;
+ cursor: pointer;
+ width: 100%;
+ padding: 12px;
+ font-size: 16px;
+ border-radius: 5px;
+ transition: all 0.3s ease-in-out;
+ box-shadow: 0 0 5px rgba(136, 136, 136, 0.5);
+ text-transform: uppercase;
+ font-weight: bold;
+ position: relative;
+ overflow: hidden; /* Для анимации заливки */
+}
+
+/* Свечение при наведении */
+button:hover {
+ background-color: rgba(136, 136, 136, 0.1);
+ box-shadow: 0 0 10px #888888, 0 0 20px #888888, 0 0 30px #888888;
+}
+
+/* Вспышка при нажатии */
+button:active {
+ animation: flash 0.2s ease-in-out;
+ transform: scale(0.98);
+}
+
+
+
+@keyframes flash {
+ 0% {
+   box-shadow: 0 0 10px #888888, 0 0 20px #888888, 0 0 30px #888888;
+ }
+ 50% {
+   box-shadow: 0 0 20px #888888, 0 0 40px #888888, 0 0 60px #888888;
+   background-color: rgba(136, 136, 136, 0.2);
+ }
+ 100% {
+   box-shadow: 0 0 10px #888888, 0 0 20px #888888, 0 0 30px #888888;
+   background-color: transparent;
+ }
+}
 
