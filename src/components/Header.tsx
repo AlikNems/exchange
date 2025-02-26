@@ -1,12 +1,26 @@
 "use client";
+import { useEffect, useState } from "react";
+import { auth } from "@/firebase";
+import { onAuthStateChanged, User } from "firebase/auth";
 import { Button } from "@mui/material";
-import "@/app/globals.css";
 import Link from "next/link";
+import "@/app/globals.css";
 
 const Header = () => {
+ const [authUser, setAuthUser] = useState<User | null>(null);
+
+ useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+   setAuthUser(user);
+  });
+
+  return () => unsubscribe();
+ }, []);
+
  return (
   <div className="header-block">
-   <Link href="/" passHref>
+   {/* Логотип с динамическим маршрутом */}
+   <Link href={authUser ? "/pages/auth/details" : "/"} passHref>
     <div className="logo-block"></div>
    </Link>
 
@@ -19,68 +33,62 @@ const Header = () => {
        height: "8vh",
        width: "10vw",
        bgcolor: "rgb(69, 65, 65)",
-       "&:hover": {
-        bgcolor: "rgb(100, 95, 95)",
-       },
+       "&:hover": { bgcolor: "rgb(100, 95, 95)" },
       }}
      >
       ABOUT US
      </Button>
     </Link>
-    <Link href="/pages/inventory" passHref>
+
+    {/* Отключаем ссылки, но текст остается таким же */}
+    <Link href={authUser ? "/pages/inventory" : "#"} passHref>
      <Button
       variant="contained"
       color="primary"
+      disabled={!authUser}
       sx={{
        height: "8vh",
-
        width: "10vw",
        bgcolor: "rgb(69, 65, 65)",
-       "&:hover": {
-        bgcolor: "rgb(100, 95, 95)",
-       },
+       "&:hover": authUser ? { bgcolor: "rgb(100, 95, 95)" } : {},
       }}
      >
       INVENTORY
      </Button>
     </Link>
 
-    <Link href="/pages/barter" passHref>
+    <Link href={authUser ? "/pages/barter" : "#"} passHref>
      <Button
       variant="contained"
       color="primary"
+      disabled={!authUser}
       sx={{
        height: "8vh",
-
        width: "10vw",
        bgcolor: "rgb(69, 65, 65)",
-       "&:hover": {
-        bgcolor: "rgb(100, 95, 95)",
-       },
+       "&:hover": authUser ? { bgcolor: "rgb(100, 95, 95)" } : {},
       }}
      >
       BARTER
      </Button>
     </Link>
-    <Link href="/pages/collection" passHref>
+
+    <Link href={authUser ? "/pages/collection" : "#"} passHref>
      <Button
       variant="contained"
       color="primary"
+      disabled={!authUser}
       sx={{
        height: "8vh",
-
        width: "10vw",
        bgcolor: "rgb(69, 65, 65)",
-       "&:hover": {
-        bgcolor: "rgb(100, 95, 95)",
-       },
+       "&:hover": authUser ? { bgcolor: "rgb(100, 95, 95)" } : {},
       }}
      >
       COLLECTION
      </Button>
     </Link>
    </div>
-
   </div>
  );
 };
