@@ -1,8 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { db } from "@/firebase";
-import { doc, getDoc } from "firebase/firestore"; // Изменяем getDocs → getDoc
-import ItemCard from "@/components/ItemCard";
+import { db, auth } from "@/api/firebase";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import ItemCard from "@/components/Inventory/ItemCard";
+import AddItemButton from "@/components/Inventory/AddItemButton";
+import AddItemModal from "@/components/Inventory/AddItemModal";
 import "@/app/styles/inventory-styles/styles.css";
 
 interface Item {
@@ -14,40 +16,74 @@ interface Item {
 
 const Inventory = () => {
   const [items, setItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const inventoryRef = doc(db, "inventories", "G2uPiPN0HwU66k7N3lPx");
-        const docSnap = await getDoc(inventoryRef);
-
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          if (Array.isArray(data.items)) {
-            setItems(data.items);
-          } else {
-            console.warn("items is not an array in Firestore.");
-          }
-        } else {
-          console.warn("No such document!");
-        }
-      } catch (error) {
-        console.error("Error fetching items:", error);
+    const fetchInventory = async () => {
+      const user = auth.currentUser;
+      if (!user) {
+        console.warn("User is not authenticated");
+        setLoading(false);
+        return;
       }
+
+      const inventoryRef = doc(db, "inventories", user.uid);
+      const inventorySnap = await getDoc(inventoryRef);
+
+      if (!inventorySnap.exists()) {
+        await setDoc(inventoryRef, { userId: user.uid, items: [] });
+        console.log("Created new inventory for user:", user.uid);
+      } else {
+        console.log("Found inventory:", inventorySnap.data());
+        setItems(inventorySnap.data().items || []);
+      }
+
+      setLoading(false);
     };
 
-    fetchItems();
+    fetchInventory();
   }, []);
+
+  const handleAddItem = async (newItem: Item) => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const inventoryRef = doc(db, "inventories", user.uid);
+    const updatedItems = [...items, newItem];
+
+    try {
+      await updateDoc(inventoryRef, { items: updatedItems });
+      setItems(updatedItems);
+    } catch (error) {
+      console.error("Failed to update inventory:", error);
+    }
+  };
 
   return (
     <div className="content-block">
       <div className="inventory-box">
-        <div className="inventory-grid">
-          {items.map((item, index) => (
-            <ItemCard key={index} item={item} />
-          ))}
-        </div>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <div className="inventory-grid">
+            {items.map((item, index) => (
+              <ItemCard key={index} item={item} />
+            ))}
+
+            {/* Кнопка добавления теперь внутри грида */}
+            <div className="add-item-button-wrapper">
+              <AddItemButton onClick={() => setModalOpen(true)} />
+            </div>
+          </div>
+        )}
       </div>
+
+      <AddItemModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onAddItem={handleAddItem}
+      />
     </div>
   );
 };

@@ -1,5 +1,5 @@
 "use client";
-import { auth } from "@/firebase";
+import { auth } from "@/api/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -32,7 +32,7 @@ const SignUp = () => {
 
  return (
   <div className="content-block">
-   <div >
+   <div>
     <form onSubmit={register}>
      <h2>Create an account</h2>
      <input
@@ -58,7 +58,9 @@ const SignUp = () => {
 
      <p className="register-text">Already have an account?</p>
      <Link href="/pages/auth/signin">
-      <button type="button" className="register-button">Log in</button>
+      <button type="button" className="register-button">
+       Log in
+      </button>
      </Link>
     </form>
    </div>

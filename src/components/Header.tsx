@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { auth } from "@/firebase";
+import { auth } from "@/api/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { Button } from "@mui/material";
 import Link from "next/link";

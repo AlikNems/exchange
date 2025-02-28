@@ -1,5 +1,5 @@
 "use client";
-import { auth } from "@/firebase";
+import { auth } from "@/api/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -49,7 +49,9 @@ const SignIn = () => {
 
      <p className="register-text">Don't have an account?</p>
      <Link href="/pages/auth/signup">
-      <button type="button" className="register-button">Sign up</button>
+      <button type="button" className="register-button">
+       Sign up
+      </button>
      </Link>
     </form>
    </div>
