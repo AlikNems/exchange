@@ -18,8 +18,36 @@
  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
  gap: 24px;
  padding: 20px;
+ justify-items: center; /* Центрирует элементы по горизонтали */
 }
 
+.add-item-button-wrapper {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ width: 100%;
+ height: auto; /* Убираем фиксированную высоту */
+}
+
+.add-item-button {
+ width: 200px; /* Фиксируем ширину кнопки */
+ height: 50px; /* Фиксируем высоту кнопки */
+ font-size: 16px;
+ background-color: #1976d2;
+ color: #fff;
+ border: none;
+ border-radius: 10px;
+ cursor: pointer;
+ text-align: center;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ transition: transform 0.2s;
+}
+
+.add-item-button:hover {
+ transform: scale(1.05);
+}
 
 
 .inventory-card {
