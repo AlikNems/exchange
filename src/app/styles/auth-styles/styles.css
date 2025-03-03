@@ -14,7 +14,7 @@
   justify-content: center;
   flex-direction: column;
   z-index: 1;
-  border: 3px solid #888888; /* Серый бордер для формы */
+  border: 3px solid #888888;
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8), 0 4px 8px rgba(0, 0, 0, 0.3);
   background-color: rgba(26, 26, 26, 0.6);
   width: 100%;
@@ -33,15 +33,15 @@ form {
  justify-content: center;
  align-items: center;
  gap: 15px;
- background-color: rgba(26, 26, 26, 0.6); /* 0.8 - степень прозрачности (от 0 до 1) */
+ background-color: rgba(26, 26, 26, 0.6);
  padding: 15px 40px;
  border-radius: 10px;
  width: 100%;
  max-width: 400px;
  position: relative;
  z-index: 1;
- border: 3px solid #888888; /* Серый бордер для формы */
- box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8), 0 4px 8px rgba(0, 0, 0, 0.3); /* Тень для эффекта выпуклости */
+ border: 3px solid #888888;
+ box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8), 0 4px 8px rgba(0, 0, 0, 0.3);
 
 }
 
@@ -51,7 +51,7 @@ h2 {
  margin-bottom: 10px;
 }
 
-/* Спокойные серые инпуты */
+
 input {
  width: 100%;
  padding: 12px;
@@ -65,23 +65,23 @@ input {
  box-shadow: 0 0 5px rgba(136, 136, 136, 0.5);
 }
 
-/* Свечение при наведении */
+
 input:hover {
  box-shadow: 0 0 10px #888888, 0 0 20px #888888, 0 0 30px #888888;
  border-color: #888888;
 }
 
-/* Фокус (чуть большее свечение) */
+
 input:focus {
  box-shadow: 0 0 15px #888888, 0 0 25px #888888, 0 0 35px #888888;
 }
 
-/* Вспышка при клике */
+
 input:active {
  animation: flash 0.2s ease-in-out;
 }
 
-/* Спокойная сероватая кнопка */
+
 button {
  background-color: transparent;
  color: #888888;
@@ -100,13 +100,13 @@ button {
 
 }
 
-/* Свечение при наведении */
+
 button:hover {
  background-color: rgba(136, 136, 136, 0.1);
  box-shadow: 0 0 10px #888888, 0 0 20px #888888, 0 0 30px #888888;
 }
 
-/* Вспышка при нажатии */
+
 button:active {
  animation: flash 0.2s ease-in-out;
  transform: scale(0.98);
@@ -141,6 +141,6 @@ button:active {
 
 .error-message {
   color: red;
-  font-size: 16px; /* Сделает текст меньше */
+  font-size: 16px; 
   text-align: center;
 }

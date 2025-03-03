@@ -11,7 +11,7 @@
  padding: 3vh 4vw;
  overflow-y: auto;
  border-radius: 10px;
- border: 3px solid #888888; /* Серый бордер для формы */
+ border: 3px solid #888888; 
  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8), 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 

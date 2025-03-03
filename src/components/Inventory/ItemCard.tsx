@@ -31,7 +31,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
     >
       <CardMedia
         component="img"
-        image={item.image} // Используем изображение из БД
+        image={item.image} 
         alt={item.name}
         sx={{ height: 100, borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
       />
