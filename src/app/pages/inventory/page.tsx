@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { db, auth } from "@/api/firebase";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 import ItemCard from "@/components/Inventory/ItemCard";
 import AddItemButton from "@/components/Inventory/AddItemButton";
 import AddItemModal from "@/components/Inventory/AddItemModal";
@@ -20,8 +21,7 @@ const Inventory = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    const fetchInventory = async () => {
-      const user = auth.currentUser;
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
         console.warn("User is not authenticated");
         setLoading(false);
@@ -40,9 +40,9 @@ const Inventory = () => {
       }
 
       setLoading(false);
-    };
+    });
 
-    fetchInventory();
+    return () => unsubscribe(); // Отписка от события при размонтировании
   }, []);
 
   const handleAddItem = async (newItem: Item) => {
@@ -70,11 +70,7 @@ const Inventory = () => {
             {items.map((item, index) => (
               <ItemCard key={index} item={item} />
             ))}
-
-            {/* Кнопка добавления теперь внутри грида */}
-            <div className="add-item-button-wrapper">
-              <AddItemButton onClick={() => setModalOpen(true)} />
-            </div>
+            <AddItemButton onClick={() => setModalOpen(true)} />
           </div>
         )}
       </div>

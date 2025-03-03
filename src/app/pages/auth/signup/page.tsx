@@ -25,7 +25,7 @@ const SignUp = () => {
     setEmail("");
     setPassword("");
     setCopyPassword("");
-    router.push("/pages/auth/details"); // Перенаправление после успешной регистрации
+    router.push("/pages/auth/details"); 
    })
    .catch((error) => console.log(error));
  };

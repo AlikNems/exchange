@@ -19,7 +19,7 @@ const Header = () => {
 
  return (
   <div className="header-block">
-   {/* Логотип с динамическим маршрутом */}
+
    <Link href={authUser ? "/pages/auth/details" : "/"} passHref>
     <div className="logo-block"></div>
    </Link>
@@ -40,7 +40,7 @@ const Header = () => {
      </Button>
     </Link>
 
-    {/* Отключаем ссылки, но текст остается таким же */}
+   
     <Link href={authUser ? "/pages/inventory" : "#"} passHref>
      <Button
       variant="contained"

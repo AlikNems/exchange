@@ -20,7 +20,7 @@ const SignIn = () => {
     setError("");
     setEmail("");
     setPassword("");
-    router.push("/pages/auth/details"); // Перенаправление после успешного входа
+    router.push("/pages/auth/details"); 
    })
    .catch(() => {
     setError("SORRY, COULDN'T FIND YOUR ACCOUNT");

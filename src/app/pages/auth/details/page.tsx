@@ -21,7 +21,7 @@ const AuthDetails = () => {
   signOut(auth)
    .then(() => {
     console.log("Signed out successfully");
-    router.push("/"); // Перенаправляем на главную страницу после выхода
+    router.push("/"); 
    })
    .catch((e) => console.log(e));
  };
