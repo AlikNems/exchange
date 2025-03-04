@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Box } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import AddItemButton from "./AddItemButton";
 
 interface Item {
  name: string;
@@ -87,54 +88,11 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, onAddItem })
        outline: "none",
        textAlign: "center",
        fontSize: "16px",
-       transition: "all 0.3s ease-in-out",
-      }}
-      onFocus={(e) => {
-       e.currentTarget.style.borderColor = "#ffffff";
-       e.currentTarget.style.boxShadow = "0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #ffffff";
-      }}
-      onBlur={(e) => {
-       e.currentTarget.style.borderColor = "#888888";
-       e.currentTarget.style.boxShadow = "none";
-      }}
-      onMouseOver={(e) => {
-       e.currentTarget.style.borderColor = "#ffffff";
-       e.currentTarget.style.boxShadow = "0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #ffffff";
-      }}
-      onMouseOut={(e) => {
-       e.currentTarget.style.borderColor = "#888888";
-       e.currentTarget.style.boxShadow = "none";
       }}
      />
     ))}
 
-    <button
-     onClick={handleSubmit}
-     style={{
-      width: "100%",
-      marginTop: "16px",
-      padding: "10px",
-      borderRadius: "5px",
-      transition: "all 0.3s ease-in-out",
-      boxShadow: "0 0 5px rgba(136, 136, 136, 0.5)",
-      textTransform: "uppercase",
-      backgroundColor: "transparent",
-      color: "#888888",
-      border: "2px solid #888888",
-      cursor: "pointer",
-      fontSize: "16px",
-     }}
-     onMouseOver={(e) => {
-      e.currentTarget.style.backgroundColor = "rgba(136, 136, 136, 0.1)";
-      e.currentTarget.style.boxShadow = "0 0 10px #888888, 0 0 20px #888888, 0 0 30px #888888";
-     }}
-     onMouseOut={(e) => {
-      e.currentTarget.style.backgroundColor = "transparent";
-      e.currentTarget.style.boxShadow = "0 0 5px rgba(136, 136, 136, 0.5)";
-     }}
-    >
-     Add Item
-    </button>
+    <AddItemButton onClick={handleSubmit} />
    </Box>
   </Modal>
  );
