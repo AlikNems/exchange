@@ -1,4 +1,12 @@
+.modal-overlay {
+ backdrop-filter: blur(10px);
+}
+
 .inventory-box {
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -50%);
  background-color: rgba(26, 26, 26, 0.6);
  border-radius: 10px;
  border: 3px solid #888888;
@@ -8,7 +16,7 @@
  z-index: 1;
  width: 100%;
  max-width: 80vw;
- height: 100%;
+ height: auto;
  max-height: 65vh;
  overflow-y: auto;
 }
@@ -52,14 +60,27 @@
 }
 
 .modal-title {
- margin: 0;
+ margin-bottom: 30px;
  text-align: center;
  flex-grow: 1;
+ font-size: 35px;
+}
+
+.modal-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ color: white;
+ position: relative;
 }
 
 .close-icon {
+ position: absolute;
+ top: 10px;
+ right: 10px;
  transition: transform 0.2s ease-in-out;
  cursor: pointer;
+ color: grey;
 }
 
 .close-icon:hover {
@@ -87,22 +108,96 @@
  box-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #ffffff;
 }
 
-.inventory-button {
- width: 100%;
- margin-top: 16px;
- padding: 10px;
- border-radius: 5px;
- transition: all 0.3s ease-in-out;
- box-shadow: 0 0 5px rgba(136, 136, 136, 0.5);
- text-transform: uppercase;
- background-color: transparent;
- color: #888888;
- border: 2px solid #888888;
- cursor: pointer;
- font-size: 16px;
+/* Скрыть стрелочки для input[type="number"] */
+.inventory-input[type="number"]::-webkit-outer-spin-button,
+.inventory-input[type="number"]::-webkit-inner-spin-button {
+ -webkit-appearance: none;
+ margin: 0;
 }
 
-.inventory-button:hover {
+.inventory-input[type="number"] {
+ -moz-appearance: textfield;
+ appearance: none;
+}
+
+.add-item-modal-button {
+ margin-top: 15px;
+ width: 100%;
+ padding: 10px;
+ border-radius: 5px;
+ font-size: 16px;
+ text-transform: uppercase;
+ cursor: pointer;
+ background-color: #1976d2;
+ color: white;
+ border: none;
+ transition: background 0.3s ease-in-out;
+}
+
+.add-item-modal-button {
+ margin-top: 25px;
+ width: 100%;
+ padding: 10px;
+ border-radius: 5px;
+ font-size: 16px;
+ text-transform: uppercase;
+ cursor: pointer;
+ background-color: transparent;
+ color: white;
+ border: 2px solid #888888;
+ transition: all 0.3s ease-in-out;
+}
+
+.add-item-modal-button:hover,
+.add-item-modal-button:focus {
  background-color: rgba(136, 136, 136, 0.1);
- box-shadow: 0 0 10px #888888, 0 0 20px #888888, 0 0 30px #888888;
+ border-color: #ffffff;
+ box-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #ffffff;
+}
+
+
+
+.modal-container {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ background-color: rgba(26, 26, 26, 0.9);
+ border-radius: 12px;
+ border: 3px solid #888888;
+ box-shadow: 0 8px 12px rgba(0, 0, 0, 0.8), 0 4px 8px rgba(0, 0, 0, 0.3);
+ padding: 30px;
+ width: 500px;
+ height: 600px;
+ max-width: 90vw;
+ max-height: 90vh;
+ overflow-y: auto;
+}
+
+.upload-photo {
+ color: white;
+}
+
+.photo-preview {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-top: 10px;
+ gap: 70px;
+}
+
+.photo-preview button {
+ background-color: transparent;
+ color: #ffffff;
+ border: none;
+ cursor: pointer;
+ font-size: 14px;
+}
+
+.photo-preview button:hover {
+ text-decoration: underline;
 }
