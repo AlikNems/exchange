@@ -2,18 +2,11 @@
 import React, { useEffect, useState } from "react";
 import { db, auth } from "@/api/firebase";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { onAuthStateChanged } from "firebase/auth";
 import ItemCard from "@/components/Inventory/ItemCard";
 import AddItemButton from "@/components/Inventory/AddItemButton";
 import AddItemModal from "@/components/Inventory/AddItemModal";
+import { Item } from "@/types/Item";
 import "@/app/styles/inventory-styles/styles.css";
-
-interface Item {
-  name: string;
-  description: string;
-  image: string;
-  userId: string;
-}
 
 const Inventory = () => {
   const [items, setItems] = useState<Item[]>([]);
@@ -21,7 +14,8 @@ const Inventory = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    const fetchInventory = async () => {
+      const user = auth.currentUser;
       if (!user) {
         console.warn("User is not authenticated");
         setLoading(false);
@@ -40,9 +34,9 @@ const Inventory = () => {
       }
 
       setLoading(false);
-    });
+    };
 
-    return () => unsubscribe(); // Отписка от события при размонтировании
+    fetchInventory();
   }, []);
 
   const handleAddItem = async (newItem: Item) => {
@@ -70,16 +64,21 @@ const Inventory = () => {
             {items.map((item, index) => (
               <ItemCard key={index} item={item} />
             ))}
-            <AddItemButton onClick={() => setModalOpen(true)} />
+
+            <div className="add-item-button-wrapper">
+              <AddItemButton onClick={() => setModalOpen(true)} />
+            </div>
           </div>
         )}
       </div>
 
-      <AddItemModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onAddItem={handleAddItem}
-      />
+      {modalOpen && (
+        <AddItemModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          onAddItem={handleAddItem}
+        />
+      )}
     </div>
   );
 };
