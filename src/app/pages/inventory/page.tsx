@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { db, auth } from "@/api/firebase";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { onAuthStateChanged, User } from "firebase/auth";
 import ItemCard from "@/components/Inventory/ItemCard";
 import AddItemButton from "@/components/Inventory/AddItemButton";
 import AddItemModal from "@/components/Inventory/AddItemModal";
@@ -12,41 +13,50 @@ const Inventory = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(auth.currentUser);
 
   useEffect(() => {
-    const fetchInventory = async () => {
-      const user = auth.currentUser;
-      if (!user) {
-        console.warn("User is not authenticated");
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        await fetchInventory(currentUser.uid);
+      } else {
+        setItems([]);
         setLoading(false);
-        return;
       }
+    });
 
-      const inventoryRef = doc(db, "inventories", user.uid);
+    return () => unsubscribe();
+  }, []);
+
+  const fetchInventory = async (userId: string) => {
+    try {
+      setLoading(true);
+      const inventoryRef = doc(db, "inventories", userId);
       const inventorySnap = await getDoc(inventoryRef);
 
       if (!inventorySnap.exists()) {
-        await setDoc(inventoryRef, { userId: user.uid, items: [] });
-        console.log("Created new inventory for user:", user.uid);
+        await setDoc(inventoryRef, { userId, items: [] });
+        console.log("Created new inventory for user:", userId);
+        setItems([]);
       } else {
-        console.log("Found inventory:", inventorySnap.data());
-        setItems(inventorySnap.data().items || []);
+        const data = inventorySnap.data();
+        setItems(data.items || []);
       }
-
+    } catch (error) {
+      console.error("Error fetching inventory:", error);
+    } finally {
       setLoading(false);
-    };
-
-    fetchInventory();
-  }, []);
+    }
+  };
 
   const handleAddItem = async (newItem: Item) => {
-    const user = auth.currentUser;
     if (!user) return;
 
-    const inventoryRef = doc(db, "inventories", user.uid);
-    const updatedItems = [...items, newItem];
-
     try {
+      const inventoryRef = doc(db, "inventories", user.uid);
+      const updatedItems = [...items, newItem];
+
       await updateDoc(inventoryRef, { items: updatedItems });
       setItems(updatedItems);
     } catch (error) {
