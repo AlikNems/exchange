@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Box } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { Item } from "@/types/Item";
+import { Item, blobToBase64 } from "@/types/Item";
 
 interface AddItemModalProps {
   open: boolean;
@@ -23,19 +23,26 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, onAddItem })
       return;
     }
 
-    // Здесь вы можете добавить логику загрузки файла, если нужно
-    const newItem: Item = {
-      name,
-      description,
-      image,  // URL изображения
-      userId: "TEMP_USER_ID",
-      weight: parseFloat(weight),
-      size
-    };
+    try {
+      // Конвертируем файл в base64
+      const base64Image = await blobToBase64(photo);
 
-    onAddItem(newItem);
-    onClose();
-    resetForm();
+      const newItem: Item = {
+        name,
+        description,
+        image: base64Image,
+        userId: "TEMP_USER_ID", // Замените на реальный ID пользователя
+        weight: parseFloat(weight),
+        size
+      };
+
+      onAddItem(newItem);
+      onClose();
+      resetForm();
+    } catch (error) {
+      console.error("Error converting image:", error);
+      alert("Failed to process image");
+    }
   };
 
   const resetForm = () => {
@@ -105,25 +112,25 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, onAddItem })
             className="inventory-input"
             required
           />
-       {image && (
-  <div className="photo-preview">
-    <img
-      src={image}
-      alt="Preview"
-      style={{
-        maxWidth: "100%",
-        maxHeight: "100px", // Уменьшил высоту с 200px до 100px
-        objectFit: 'cover',
-        borderRadius: '8px', // Добавил скругление углов для эстетики
-        marginTop: '8px' // Добавил небольший отступ сверху
-      }}
-    />
-    <button type="button" onClick={() => {
-      setPhoto(null);
-      setImage("");
-    }}>Remove</button>
-  </div>
-)}
+          {image && (
+            <div className="photo-preview">
+              <img
+                src={image}
+                alt="Preview"
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100px",
+                  objectFit: 'cover',
+                  borderRadius: '8px',
+                  marginTop: '8px'
+                }}
+              />
+              <button type="button" onClick={() => {
+                setPhoto(null);
+                setImage("");
+              }}>Remove</button>
+            </div>
+          )}
         </div>
 
         <button

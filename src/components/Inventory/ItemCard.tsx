@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -10,6 +10,8 @@ interface ItemCardProps {
 }
 
 const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
+  const [imgSrc, setImgSrc] = useState<string>(item.image || "/fallback-image.png");
+
   return (
     <Card
       sx={{
@@ -23,12 +25,13 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
     >
       <CardMedia
         component="img"
-        image={item.image}
+        image={imgSrc}
         alt={item.name}
         sx={{
           height: 150,
-          objectFit: 'cover'
+          objectFit: "cover",
         }}
+        onError={() => setImgSrc("/fallback-image.png")}
       />
       <CardContent>
         <Typography variant="h6" component="div" gutterBottom>
