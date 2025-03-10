@@ -7,19 +7,21 @@ import { Item } from "@/types/Item";
 
 interface ItemCardProps {
   item: Item;
+  onClick: () => void;
 }
 
-const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
+const ItemCard: React.FC<ItemCardProps> = ({ item, onClick }) => {
   const [imgSrc, setImgSrc] = useState<string>(item.image || "/fallback-image.png");
 
   return (
     <Card
+      onClick={onClick}
       sx={{
         width: 250,
         borderRadius: 3,
         boxShadow: 3,
         transition: "transform 0.3s",
-        "&:hover": { transform: "scale(1.05)" },
+        "&:hover": { transform: "scale(1.05)", cursor: "pointer" },
         margin: "16px",
       }}
     >
@@ -38,13 +40,13 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
           {item.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          <strong>Description:</strong> {item.description}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
           <strong>Weight:</strong> {item.weight} kg
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          <strong>Size:</strong> {item.size} cm
+          <strong>Size:</strong> {item.size.height} x {item.size.length} x {item.size.width} cm
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          <strong>Description:</strong> {item.description}
         </Typography>
       </CardContent>
     </Card>

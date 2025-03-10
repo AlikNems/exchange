@@ -9,31 +9,64 @@ interface AddItemModalProps {
   onAddItem: (newItem: Item) => void;
 }
 
+interface InputFieldProps {
+  type: string;
+  placeholder: string;
+  value: string;
+  onChange: (value: string) => void;
+  required?: boolean;
+}
+
+// Переиспользуемый компонент для инпутов
+const InputField: React.FC<InputFieldProps> = ({
+  type,
+  placeholder,
+  value,
+  onChange,
+  required = true
+}) => {
+  return (
+    <input
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="inventory-input"
+      required={required}
+    />
+  );
+};
+
 const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, onAddItem }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [weight, setWeight] = useState("");
-  const [size, setSize] = useState("");
+  const [height, setHeight] = useState("");
+  const [length, setLength] = useState("");
+  const [width, setWidth] = useState("");
   const [photo, setPhoto] = useState<File | null>(null);
   const [image, setImage] = useState<string>("");
 
   const handleSubmit = async () => {
-    if (!name || !description || !weight || !size || !photo) {
+    if (!name || !description || !weight || !height || !length || !width || !photo) {
       alert("Please fill in all fields and upload a photo");
       return;
     }
 
     try {
-      // Конвертируем файл в base64
       const base64Image = await blobToBase64(photo);
-
       const newItem: Item = {
+        id: Date.now().toString(), // Generate a simple ID for new items
         name,
         description,
         image: base64Image,
-        userId: "TEMP_USER_ID", // Замените на реальный ID пользователя
+        userId: "TEMP_USER_ID",
         weight: parseFloat(weight),
-        size
+        size: {
+          height: parseFloat(height),
+          length: parseFloat(length),
+          width: parseFloat(width)
+        }
       };
 
       onAddItem(newItem);
@@ -49,33 +82,24 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, onAddItem })
     setName("");
     setDescription("");
     setWeight("");
-    setSize("");
+    setHeight("");
+    setLength("");
+    setWidth("");
     setPhoto(null);
     setImage("");
     const fileInput = document.getElementById("photo") as HTMLInputElement;
     if (fileInput) fileInput.value = "";
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files ? e.target.files[0] : null;
-    if (file) {
-      // Проверка типа файла
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-      if (!allowedTypes.includes(file.type)) {
-        alert('Please upload a valid image file (JPEG, PNG, GIF)');
-        return;
-      }
 
-      // Проверка размера файла (например, не более 5 МБ)
-      if (file.size > 5 * 1024 * 1024) {
-        alert('File size should be less than 5 MB');
-        return;
-      }
-
-      setPhoto(file);
-      setImage(URL.createObjectURL(file));
-    }
-  };
+  const inputFields = [
+    { type: "text", placeholder: "Name", value: name, onChange: setName },
+    { type: "text", placeholder: "Description", value: description, onChange: setDescription },
+    { type: "number", placeholder: "Weight (kg)", value: weight, onChange: setWeight },
+    { type: "number", placeholder: "Height (cm)", value: height, onChange: setHeight },
+    { type: "number", placeholder: "Length (cm)", value: length, onChange: setLength },
+    { type: "number", placeholder: "Width (cm)", value: width, onChange: setWidth },
+  ];
 
   return (
     <Modal open={open} onClose={onClose} sx={{ backdropFilter: "blur(8px)" }}>
@@ -85,20 +109,14 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, onAddItem })
           <h2 className="modal-title">Add New Item</h2>
         </Box>
 
-        {[
-          { label: "Name", value: name, setter: setName },
-          { label: "Description", value: description, setter: setDescription },
-          { label: "Weight (kg)", value: weight, setter: setWeight },
-          { label: "Size (cm)", value: size, setter: setSize }
-        ].map((field) => (
-          <input
-            key={field.label}
-            type={field.label === "Weight (kg)" || field.label === "Size (cm)" ? "number" : "text"}
-            placeholder={field.label}
+
+        {inputFields.map((field) => (
+          <InputField
+            key={field.placeholder}
+            type={field.type}
+            placeholder={field.placeholder}
             value={field.value}
-            onChange={(e) => field.setter(e.target.value)}
-            className="inventory-input"
-            required
+            onChange={field.onChange}
           />
         ))}
 
@@ -108,7 +126,21 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, onAddItem })
             id="photo"
             type="file"
             accept="image/jpeg,image/png,image/gif"
-            onChange={handleFileChange}
+            onChange={(e) => {
+              const file = e.target.files ? e.target.files[0] : null;
+              if (file) {
+                if (!["image/jpeg", "image/png", "image/gif"].includes(file.type)) {
+                  alert("Please upload a valid image file (JPEG, PNG, GIF)");
+                  return;
+                }
+                if (file.size > 5 * 1024 * 1024) {
+                  alert("File size should be less than 5 MB");
+                  return;
+                }
+                setPhoto(file);
+                setImage(URL.createObjectURL(file));
+              }
+            }}
             className="inventory-input"
             required
           />
@@ -117,13 +149,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, onAddItem })
               <img
                 src={image}
                 alt="Preview"
-                style={{
-                  maxWidth: "100%",
-                  maxHeight: "100px",
-                  objectFit: 'cover',
-                  borderRadius: '8px',
-                  marginTop: '8px'
-                }}
+                style={{ maxWidth: "100%", maxHeight: "90px", objectFit: "cover", borderRadius: "8px", marginTop: "8px" }}
               />
               <button type="button" onClick={() => {
                 setPhoto(null);
@@ -133,12 +159,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, onAddItem })
           )}
         </div>
 
-        <button
-          className="add-item-modal-button"
-          onClick={handleSubmit}
-        >
-          Add item
-        </button>
+        <button className="add-item-modal-button" onClick={handleSubmit}>Add item</button>
       </Box>
     </Modal>
   );

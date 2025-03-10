@@ -6,6 +6,7 @@ import { onAuthStateChanged, User } from "firebase/auth";
 import ItemCard from "@/components/Inventory/ItemCard";
 import AddItemButton from "@/components/Inventory/AddItemButton";
 import AddItemModal from "@/components/Inventory/AddItemModal";
+import ItemDetailsModal from "@/components/Inventory/ItemDetailModal";
 import { Item } from "@/types/Item";
 import "@/app/styles/inventory-styles/styles.css";
 
@@ -13,6 +14,7 @@ const Inventory = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [user, setUser] = useState<User | null>(auth.currentUser);
 
   useEffect(() => {
@@ -64,6 +66,20 @@ const Inventory = () => {
     }
   };
 
+  const handleDeleteItem = async (itemId: string) => {
+    if (!user) return;
+
+    try {
+      const inventoryRef = doc(db, "inventories", user.uid);
+      const updatedItems = items.filter((item) => item.id !== itemId);
+
+      await updateDoc(inventoryRef, { items: updatedItems });
+      setItems(updatedItems);
+    } catch (error) {
+      console.error("Failed to delete item:", error);
+    }
+  };
+
   return (
     <div className="content-block">
       <div className="inventory-box">
@@ -72,7 +88,7 @@ const Inventory = () => {
         ) : (
           <div className="inventory-grid">
             {items.map((item, index) => (
-              <ItemCard key={index} item={item} />
+              <ItemCard key={index} item={item} onClick={() => setSelectedItem(item)} />
             ))}
 
             <div className="add-item-button-wrapper">
@@ -87,6 +103,15 @@ const Inventory = () => {
           open={modalOpen}
           onClose={() => setModalOpen(false)}
           onAddItem={handleAddItem}
+        />
+      )}
+
+      {selectedItem && (
+        <ItemDetailsModal
+          item={selectedItem}
+          open={!!selectedItem}
+          onClose={() => setSelectedItem(null)}
+          onDelete={handleDeleteItem}
         />
       )}
     </div>

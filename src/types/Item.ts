@@ -1,13 +1,19 @@
 export interface Item {
- name: string;
- description: string;
- image: string; // Теперь всегда строка (base64 или URL)
- userId: string;
- weight: number;
- size: string;
+  id: string;
+  name: string;
+  description: string;
+  image: string; // Base64 или URL изображения
+  userId: string;
+  weight: number;
+  size: {
+    height: number;
+    length: number;
+    width: number;
+  };
 }
 
-// Утилиты для конвертации
+
+// Утилиты для конвертации изображений
 export const blobToBase64 = (blob: Blob): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
